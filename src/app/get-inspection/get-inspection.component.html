@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="card">
+    <h3>Fetch Audit</h3>
+    <input
+      [(ngModel)]="auditId"
+      placeholder="Enter Audit ID"
+      class="form-control mb-2"
+    />
+    <button (click)="fetchAudit()" class="btn btn-primary w-100 mb-2">
+      Get Audit
+    </button>
+
+    <div *ngIf="loading" class="spinner"></div>
+    <div *ngIf="auditData">
+      <pre>{{ auditData | json }}</pre>
+    </div>
+  </div>
+</div>

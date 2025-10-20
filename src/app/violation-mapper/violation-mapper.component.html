@@ -1,0 +1,281 @@
+<div class="container">
+  <!-- File Uploads -->
+  <div class="upload-section">
+    <div class="upload-card">
+      <h2>Traffic Violation File Upload</h2>
+      <input
+        type="file"
+        (change)="onTrafficViolationUpload($event)"
+        accept=".xlsx,.csv"
+      />
+      <p *ngIf="trafficViolationFileName">
+        Selected File: {{ trafficViolationFileName }}
+      </p>
+    </div>
+
+    <div class="upload-card">
+      <h2>Operation Data File Upload</h2>
+      <input
+        type="file"
+        (change)="onOperationDataUpload($event)"
+        accept=".xlsx,.csv"
+      />
+      <p *ngIf="operationDataFileName">
+        Selected File: {{ operationDataFileName }}
+      </p>
+    </div>
+  </div>
+  <!-- Loader -->
+  <div class="loader" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Processing file, please wait...</p>
+  </div>
+
+  <!-- Proceed Button -->
+  <div class="proceed-btn-wrapper">
+    <button class="proceed-btn" (click)="proceedData()" [disabled]="isLoading">
+      {{ isLoading ? 'Processing....' : 'Proceed Data' }}
+    </button>
+  </div>
+
+  <!-- Matched Table & Export -->
+  <div *ngIf="matchedData.length > 0">
+    <div class="table-header">
+      <h3>Matched Data ( {{ matchedData.length }} )</h3>
+      <div *ngIf="pushMessage" class="push-message">
+        {{ pushMessage }}
+      </div>
+      <div class="table-buttons">
+        <button class="export-btn" (click)="exportTrafficViolation('matched')">
+          Export Matched
+        </button>
+        <button class="copy-btn" (click)="copyTableFallback('matched')">
+          Copy Table
+        </button>
+        <button
+          class="push-btn"
+          (click)="pushMatchedSequentially()"
+          [disabled]="isLoading"
+        >
+          {{ isLoading ? 'Pushing...' : 'Push to SafetyCulture' }}
+        </button>
+      </div>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Car No</th>
+            <th>Make</th>
+            <th>Violation Number</th>
+            <th>Violation Date</th>
+            <th>Shift Start Date Time</th>
+            <th>Shift End Date Time</th>
+            <th>Violation Description</th>
+            <th>Violation Location</th>
+            <th>Amount</th>
+            <th>Amount To Pay</th>
+            <th>Driver ID</th>
+            <th>Driver Name</th>
+            <th>Employee No</th>
+            <th>Phone No</th>
+            <th>Vehicle Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of matchedData">
+            <td>{{ row.CarNo }}</td>
+            <td>{{ row.Make }}</td>
+            <td>{{ row.ViolationNumber }}</td>
+            <td>{{ row.Date }} {{ row.Time }}</td>
+            <td>{{ row.StartDateTime }}</td>
+            <td>{{ row.EndDateTime }}</td>
+            <td>{{ row.Description }}</td>
+            <td>{{ row.Location }}</td>
+            <td>{{ row.Amount }}</td>
+            <td>{{ row.AmountToPay }}</td>
+            <td>{{ row.DriverID }}</td>
+            <td>{{ row.DriverName }}</td>
+            <td>{{ row.EmployeeNo }}</td>
+            <td>{{ row.PhoneNo }}</td>
+            <td>{{ row.VehicleType }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Unmatched Table & Export -->
+  <div *ngIf="unmatchedData.length > 0">
+    <div class="table-header">
+      <h3>Unmatched Data ( {{ unmatchedData.length }} )</h3>
+      <div class="table-buttons">
+        <button
+          class="export-btn"
+          (click)="exportTrafficViolation('unmatched')"
+        >
+          Export Unmatched
+        </button>
+        <button class="copy-btn" (click)="copyTableFallback('unmatched')">
+          Copy Table
+        </button>
+      </div>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Car No</th>
+            <th>Make</th>
+            <th>Violation Number</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Amount</th>
+            <th>Amount To Pay</th>
+            <th>Point</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of unmatchedData">
+            <td>{{ row['Car No'] }}</td>
+            <td>{{ row['Make'] }}</td>
+            <td>{{ row['Violation Number'] }}</td>
+            <td>{{ row.Date }}</td>
+            <td>{{ row.Time }}</td>
+            <td>{{ row['Description'] }}</td>
+            <td>{{ row['Location'] }}</td>
+            <td>{{ row['Amount'] }}</td>
+            <td>{{ row['Amount to Pay'] }}</td>
+            <td>{{ row['Point'] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="pushSuccessData.length > 0">
+    <div class="table-header">
+      <h3 class="success-heading">
+        Pushed Successfully ( {{ pushSuccessData?.length }} )
+      </h3>
+      <div class="table-buttons">
+        <button class="export-btn" (click)="exportTrafficViolation('success')">
+          Export
+        </button>
+        <button class="copy-btn" (click)="copyTableFallback('success')">
+          Copy
+        </button>
+        <button class="whatsapp-btn" (click)="onWhatsappClick()">
+          WhatsApp
+        </button>
+      </div>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Car No</th>
+            <th>Make</th>
+            <th>Violation Number</th>
+            <th>Violation Date</th>
+            <th>Shift Start Date Time</th>
+            <th>Shift End Date Time</th>
+            <th>Violation Description</th>
+            <th>Violation Location</th>
+            <th>Amount</th>
+            <th>Amount To Pay</th>
+            <th>Driver ID</th>
+            <th>Driver Name</th>
+            <th>Employee No</th>
+            <th>Phone No</th>
+            <th>Vehicle Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of pushSuccessData">
+            <td>{{ row.CarNo }}</td>
+            <td>{{ row.Make }}</td>
+            <td>{{ row.ViolationNumber }}</td>
+            <td>{{ row.Date }} {{ row.Time }}</td>
+            <td>{{ row.StartDateTime }}</td>
+            <td>{{ row.EndDateTime }}</td>
+            <td>{{ row.Description }}</td>
+            <td>{{ row.Location }}</td>
+            <td>{{ row.Amount }}</td>
+            <td>{{ row.AmountToPay }}</td>
+            <td>{{ row.DriverID }}</td>
+            <td>{{ row.DriverName }}</td>
+            <td>{{ row.EmployeeNo }}</td>
+            <td>{{ row.PhoneNo }}</td>
+            <td>{{ row.VehicleType }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="pushErrorData.length > 0">
+    <div class="table-header">
+      <h3 class="failed-heading">
+        Failed Push ( {{ pushErrorData?.length }} )
+      </h3>
+      <div class="table-buttons">
+        <button class="export-btn" (click)="exportTrafficViolation('failed')">
+          Export
+        </button>
+        <button class="copy-btn" (click)="copyTableFallback('failed')">
+          Copy
+        </button>
+        <button class="push-btn" (click)="retryFailedPush()">Push Again</button>
+      </div>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Car No</th>
+            <th>Make</th>
+            <th>Violation Number</th>
+            <th>Violation Date</th>
+            <th>Shift Start Date Time</th>
+            <th>Shift End Date Time</th>
+            <th>Violation Description</th>
+            <th>Violation Location</th>
+            <th>Amount</th>
+            <th>Amount To Pay</th>
+            <th>Driver ID</th>
+            <th>Driver Name</th>
+            <th>Employee No</th>
+            <th>Phone No</th>
+            <th>Vehicle Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of pushErrorData">
+            <td>{{ row.CarNo }}</td>
+            <td>{{ row.Make }}</td>
+            <td>{{ row.ViolationNumber }}</td>
+            <td>{{ row.Date }} {{ row.Time }}</td>
+            <td>{{ row.StartDateTime }}</td>
+            <td>{{ row.EndDateTime }}</td>
+            <td>{{ row.Description }}</td>
+            <td>{{ row.Location }}</td>
+            <td>{{ row.Amount }}</td>
+            <td>{{ row.AmountToPay }}</td>
+            <td>{{ row.DriverID }}</td>
+            <td>{{ row.DriverName }}</td>
+            <td>{{ row.EmployeeNo }}</td>
+            <td>{{ row.PhoneNo }}</td>
+            <td>{{ row.VehicleType }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showWhatsapp">
+  <app-whatsapp></app-whatsapp>
+</div>

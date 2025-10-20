@@ -1,0 +1,13 @@
+<header class="header">
+  <div class="logo">
+    <a routerLink="/">MyApp</a>
+  </div>
+
+  <nav class="nav-links">
+    <a routerLink="/login" *ngIf="!loggedIn">Login</a>
+    <a routerLink="/violation-mapper" *ngIf="loggedIn">Violation Mapper</a>
+    <a routerLink="/get-inspection" *ngIf="loggedIn">Get Audit</a>
+    <a routerLink="/whatsapp">Whatsapp</a>
+    <button *ngIf="loggedIn" (click)="logout()">Logout</button>
+  </nav>
+</header>

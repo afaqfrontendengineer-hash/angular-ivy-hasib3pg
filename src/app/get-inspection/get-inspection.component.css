@@ -1,0 +1,103 @@
+/* Container */
+.container {
+  max-width: auto;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  margin-top: 20px;
+}
+
+/* Card styling */
+.card {
+  border-radius: 20px; /* round corners */
+  background-color: #ffffff;
+  padding: 30px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Input styling */
+input.form-control {
+  border-radius: 30px; /* fully rounded */
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+input.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 30px; /* fully rounded buttons */
+  padding: 12px 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-success {
+  background-color: #28a745;
+  border: none;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Spinner */
+.spinner {
+  margin: 10px auto;
+  width: 40px;
+  height: 40px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Text alignment */
+.text-center {
+  text-align: center;
+}
+
+/* Audit Data Card */
+.bg-light {
+  background-color: #f8f9fa !important;
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.05);
+}

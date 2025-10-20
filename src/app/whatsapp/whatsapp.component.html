@@ -1,0 +1,138 @@
+<div class="container">
+  <div class="card">
+    <h3>Fleet WhatsApp Sender</h3>
+
+    <!-- Select method -->
+    <div class="method-selection">
+      <label>
+        <input
+          type="radio"
+          name="method"
+          value="single"
+          [(ngModel)]="method"
+          (change)="updateNumbers()"
+        />
+        Single Number
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="method"
+          value="multiple"
+          [(ngModel)]="method"
+          (change)="updateNumbers()"
+        />
+        Multiple Numbers
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="method"
+          value="excel"
+          [(ngModel)]="method"
+          (change)="updateNumbers()"
+        />
+        Excel
+      </label>
+    </div>
+
+    <!-- Single Number -->
+    <div *ngIf="method === 'single'" class="input-section">
+      <input
+        type="text"
+        [(ngModel)]="singleNumber"
+        placeholder="Enter number with country code"
+        (input)="updateList()"
+      />
+    </div>
+
+    <!-- Multiple Numbers -->
+    <div *ngIf="method === 'multiple'" class="input-section">
+      <textarea
+        rows="4"
+        [(ngModel)]="multipleNumbersText"
+        placeholder="Enter numbers, one per line"
+        (input)="updateList()"
+      ></textarea>
+    </div>
+
+    <!-- Excel Upload -->
+    <div *ngIf="method === 'excel'" class="input-section">
+      <input type="file" (change)="onFileChange($event)" accept=".xlsx,.xls" />
+      <p *ngIf="numbers.length">
+        {{ numbers.length }} numbers loaded from Excel
+      </p>
+    </div>
+
+    <!-- Message Type (only for Excel with file) -->
+    <div class="msg-type" *ngIf="method === 'excel' && numbers.length > 0">
+      <label>
+        <input
+          type="radio"
+          name="msgType"
+          value="custom"
+          [(ngModel)]="messageType"
+        />
+        Custom Message
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="msgType"
+          value="traffic"
+          [(ngModel)]="messageType"
+        />
+        Traffic Violation
+      </label>
+    </div>
+
+    <!-- Message Textarea -->
+    <!-- Message Textarea / Preview -->
+    <div
+      class="input-section"
+      *ngIf="
+        method !== 'excel' || (method === 'excel' && messageType === 'custom')
+      "
+    >
+      <textarea
+        rows="4"
+        [(ngModel)]="customMessage"
+        placeholder="Type your message here"
+      ></textarea>
+    </div>
+
+    <!-- Traffic message preview -->
+    <!-- Traffic message preview with number/car mapping -->
+    <div
+      class="input-section"
+      *ngIf="
+        method === 'excel' && messageType === 'traffic' && numbers.length > 0
+      "
+    >
+      <h4>Numbers to Send: (Total: {{ numbers?.length }})</h4>
+      <ul>
+        <li *ngFor="let row of numbers; let i = index">
+          <strong
+            >{{ row.phone }}
+            <span *ngIf="row['Car No']">({{ row['Car No'] }})</span>:</strong
+          >
+          {{ getMessage(row) }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Numbers List -->
+    <div *ngIf="numbers.length > 0" class="numbers-list">
+      <h4>Numbers to Send: (Total: {{ numbers?.length }})</h4>
+      <ul>
+        <li *ngFor="let row of numbers; let i = index">
+          {{ row.phone }}
+          <button *ngIf="!numbersStatus[i]" (click)="sendWhatsapp(row, i)">
+            Send WhatsApp
+          </button>
+          <span *ngIf="numbersStatus[i]" class="done-label">Done</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
