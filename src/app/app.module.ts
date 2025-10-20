@@ -1,49 +1,16 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AppRoutingModule } from './app-routing/app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { LoginComponent } from './login/login.component';
-import { WhatsappComponent } from './whatsapp/whatsapp.component';
-import { GetInspectionComponent } from './get-inspection/get-inspection.component';
-
-import { AuthService } from './Services/Auth/auth.service';
-import { SharedDataService } from './Services/shared-data.service';
-import { AuthGuard } from './guards/auth.guard';
-import { TokenIntercepterService } from './guards/token-intercepter.service';
-import { SafteyCultureService } from './Services/saftey-culture.service';
-import { ViolationMapperComponent } from './violation-mapper/violation-mapper.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HeaderComponent,
-    LoginComponent,
-    WhatsappComponent,
-    GetInspectionComponent,
-    ViolationMapperComponent,
+    AppComponent
   ],
   imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    AppRoutingModule,
+    BrowserModule
   ],
-  providers: [
-    AuthService,
-    SharedDataService,
-    SafteyCultureService,
-    AuthGuard,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenIntercepterService,
-      multi: true,
-    },
-  ],
-  bootstrap: [AppComponent],
+  providers: [],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
