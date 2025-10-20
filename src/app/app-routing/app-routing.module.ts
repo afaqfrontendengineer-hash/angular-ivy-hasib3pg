@@ -14,7 +14,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   { path: 'get-inspection', component: GetInspectionComponent },
-  { path: '**', redirectTo: 'login' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },  // redirect empty path
+  { path: '**', redirectTo: 'login' },                   // wildcard
 ];
 
 @NgModule({
